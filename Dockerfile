@@ -17,7 +17,7 @@
 ##### ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- #####
 
 # Define parent image
-FROM ubuntu:jammy as builder
+FROM ubuntu:focal as builder
 
 #Version variable only accessible in build
 ARG DORADO_VER="0.5.1"
@@ -55,8 +55,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #     cuda-toolkit-12-3 && \
 #     apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
-RUN wget https://cdn.oxfordnanoportal.com/software/analysis/dorado-0.5.1-linux-x64.tar.gz && \
-    tar -xvf dorado-0.5.1-linux-x64.tar.gz && mv dorado-0.5.1-linux-x64 dorado-0.5.1
+RUN wget https://cdn.oxfordnanoportal.com/software/analysis/dorado-${DORADO_VER}-linux-x64.tar.gz && \
+    tar -xvf dorado-${DORADO_VER}-linux-x64.tar.gz && mv dorado-${DORADO_VER}-linux-x64 dorado-${DORADO_VER} && \
+    rm dorado-${DORADO_VER}-linux-x64.tar.gz
 
 # RUN git clone https://github.com/nanoporetech/dorado.git dorado && \
 #     cd dorado && \
@@ -78,7 +79,7 @@ RUN wget https://cdn.oxfordnanoportal.com/software/analysis/dorado-0.5.1-linux-x
 # 'FROM' defines where the Dockerfile is starting to build from. This command has to come first in the file
 # The 'as' keyword lets you name the folowing stage. The production image uses everything to the 'app' stage.
 
-FROM ubuntu:jammy as app
+FROM ubuntu:focal as app
 
 # List all software versions are ARGs near the top of the dockerfile
 # 'ARG' sets environment variables during the build stage
